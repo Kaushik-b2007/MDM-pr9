@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Personal To-Do List</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- Main Container -->
+    <div class="max-w-xl mx-auto pt-12 px-4">
+
+        <!-- Heading -->
+        <div class="bg-gray-600 text-white text-center rounded-t-xl p-6">
+            <h1 class="text-3xl font-bold">Personal To-Do List</h1>
+            <p class="mt-2">Organize your daily tasks</p>
+        </div>
+
+        <!-- To-Do Box -->
+        <div class="bg-white p-6 rounded-b-xl shadow-lg">
+
+            <!-- Input Area -->
+            <div class="flex gap-2 mb-6">
+                <input
+                    type="text"
+                    id="taskInput"
+                    placeholder="Enter a new task..."
+                    class="flex-1 border border-gray-300 rounded-lg px-4 py-3
+                           focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+
+                <button
+                    onclick="addTask()"
+                    class="bg-blue-600 text-white px-5 py-3 rounded-lg
+                           hover:bg-blue-700 transition"
+                >
+                    Add
+                </button>
+            </div>
+
+            <!-- Task List -->
+            <ul id="taskList" class="space-y-3"></ul>
+
+            <!-- Message when no tasks -->
+            <p id="emptyMessage" class="text-center text-gray-500">
+                No tasks added yet.
+            </p>
+
+        </div>
+    </div>
+
+
+    <script>
+
+        // Add a new task
+        function addTask() {
+
+            const taskInput = document.getElementById("taskInput");
+            const taskText = taskInput.value.trim();
+
+            // Check empty input
+            if (taskText === "") {
+                alert("Please enter a task!");
+                return;
+            }
+
+            // Create list item
+            const li = document.createElement("li");
+
+            li.className =
+                "flex items-center justify-between bg-gray-50 " +
+                "border border-gray-200 rounded-lg p-4";
+
+            // Task text
+            const span = document.createElement("span");
+            span.textContent = taskText;
+            span.className = "text-gray-800 flex-1 cursor-pointer";
+
+            // Mark task completed
+            span.onclick = function () {
+                span.classList.toggle("line-through");
+                span.classList.toggle("text-gray-400");
+            };
+
+            // Delete button
+            const deleteButton = document.createElement("button");
+
+            deleteButton.textContent = "Delete";
+
+            deleteButton.className =
+                "bg-red-500 text-white px-3 py-2 rounded-lg " +
+                "hover:bg-red-600 transition ml-3";
+
+            deleteButton.onclick = function () {
+                li.remove();
+                updateEmptyMessage();
+            };
+
+            // Add elements to list item
+            li.appendChild(span);
+            li.appendChild(deleteButton);
+
+            // Add task to list
+            document.getElementById("taskList").appendChild(li);
+
+            // Clear input
+            taskInput.value = "";
+
+            updateEmptyMessage();
+        }
+
+
+        // Update empty message
+        function updateEmptyMessage() {
+
+            const taskList = document.getElementById("taskList");
+            const emptyMessage = document.getElementById("emptyMessage");
+
+            if (taskList.children.length === 0) {
+                emptyMessage.style.display = "block";
+            } else {
+                emptyMessage.style.display = "none";
+            }
+        }
+
+
+        // Add task when Enter key is pressed
+        document.getElementById("taskInput").addEventListener(
+            "keypress",
+            function(event) {
+
+                if (event.key === "Enter") {
+                    addTask();
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>
